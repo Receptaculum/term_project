@@ -1,4 +1,4 @@
-module top (clk, rst, digit, seg_data, o00_pe, o01_pe, o10_pe, o11_pe, o00_3b3, o01_3b3, o10_3b3, o11_3b3, o00_2b2, o01_2b2, o10_2b2, o11_2b2, state);
+module top (clk, rst, digit, seg_data, o00_pe, o01_pe, o10_pe, o11_pe, o00_3b3, o01_3b3, o10_3b3, o11_3b3, o00_2b2, o01_2b2, o10_2b2, o11_2b2, state, state_for_disp);
 	input clk, rst;
 	output [2:0] digit;
 	output [7:0] seg_data;
@@ -16,7 +16,7 @@ module top (clk, rst, digit, seg_data, o00_pe, o01_pe, o10_pe, o11_pe, o00_3b3, 
 	f10, f11, f12,
 	f20, f21, f22;
 	
-    (* keep = "true", dont_touch = "true" *) output wire [7:0]
+    output wire [7:0]
 	o00_pe, o01_pe,
 	o10_pe, o11_pe;
 
@@ -30,6 +30,8 @@ module top (clk, rst, digit, seg_data, o00_pe, o01_pe, o10_pe, o11_pe, o00_3b3, 
 
 	// 임시
 	output wire [2:0] state;
+	output wire [3:0] state_for_disp;
+	
 
 	// Controller
 	controller control (.clk(clk), .rst(rst),
@@ -49,7 +51,7 @@ module top (clk, rst, digit, seg_data, o00_pe, o01_pe, o10_pe, o11_pe, o00_3b3, 
     .filter_data6(f20), .filter_data7(f21), .filter_data8(f22));
 				
     // PE (사용되지 않는 값을 자동으로 제거하는 최적화 알고리즘을 억제하기 위해 (* dont_touch = "true" *) 옵션을 사용함
-    (* keep = "true", dont_touch = "true" *) one_by_one_systolic pe (.clk_in(clk), .rst(rst_pe),
+    one_by_one_systolic pe (.clk_in(clk), .rst(rst_pe),
     .i00(i00), .i01(i01), .i02(i02), .i03(i03),
     .i10(i10), .i11(i11), .i12(i12), .i13(i13),
     .i20(i20), .i21(i21), .i22(i22), .i23(i23),
@@ -93,7 +95,9 @@ module top (clk, rst, digit, seg_data, o00_pe, o01_pe, o10_pe, o11_pe, o00_3b3, 
     .o10(o10_2b2), .o11(o11_2b2)
     );
 	
+	
+
 	// Display
-	display disp_module (.clk(clk), .resetn(rst_disp), .c9_11(o00_3b3), .c9_12(o01_3b3), .c9_21(o10_3b3), .c9_22(o11_3b3), .c4_11(o00_2b2), .c4_12(o01_2b2), .c4_21(o10_2b2), .c4_22(o11_2b2) .digit(digit), .seg_data(seg_data));
+	display disp (.clk(clk), .resetn(rst_disp), .c9_11(o00_3b3), .c9_12(o01_3b3), .c9_21(o10_3b3), .c9_22(o11_3b3), .c4_11(o00_2b2), .c4_12(o01_2b2), .c4_21(o10_2b2), .c4_22(o11_2b2), .digit(digit), .seg_data(seg_data), .state(state_for_disp));
 	
 endmodule

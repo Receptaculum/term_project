@@ -1,5 +1,3 @@
-// 문제 수정본
-
 module display(
     input clk,
     input resetn,
@@ -7,7 +5,7 @@ module display(
                 c4_11, c4_12, c4_21, c4_22,
     output reg [2:0] digit,
     output reg [7:0] seg_data,
-	output state
+	output reg [3:0] state
     );
     
     //clk
@@ -27,7 +25,7 @@ module display(
     parameter S07 = 4'b0111;
     parameter S08 = 4'b1000;
     
-    reg [3:0] state;
+
     reg [3:0] next_state;
     
     always @(posedge clk_1hz or posedge resetn) begin
@@ -78,6 +76,12 @@ module display(
     //fsm state
     always @(state or i) begin
         case (state)
+            INI : begin
+                decoder_f_in <= 4'b0000;
+                decoder_s_in <= 4'b0000;
+                decoder_t_in <= 4'b0000;
+            end
+            
             S01 : begin 
                 decoder_f_in <= c9_11_d[11:8];
                 decoder_s_in <= c9_11_d[7:4];

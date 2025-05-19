@@ -112,7 +112,7 @@ o10, o11
 	wire out_clk_pre, out_clk_post;
 	
 	// Hazard Remove
-	assign out_clk_pre = cnt[3] & cnt[2] & !cnt[1] & !cnt[0];
+	assign out_clk_pre = cnt[3] & !cnt[2] & cnt[1] & !cnt[0];
 	one_bit_register haz_rm_out_clk (.in(out_clk_pre), .clk(clk), .rst(rst), .out(out_clk_post));
 
 	// Memory Instantiation

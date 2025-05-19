@@ -32,6 +32,7 @@ module controller (
         if (!rst) begin
             state <= S0;
             counter <= 0;
+			
         end else begin
             if (counter >= target_count) begin
                 state <= next_state;
@@ -43,7 +44,7 @@ module controller (
     end
 
     // 다음 상태 및 시간 설정
-    always @(*) begin
+    always @(posedge clk) begin
         next_state = state;
         target_count = TIME_S0;
 
@@ -76,20 +77,14 @@ module controller (
     end
 
     // 출력 신호 제어 (Moore 방식)
-	always @(*) begin
-    		rst_mem  = 1;
-    		rst_pe   = 1;
-    		rst_3b3  = 1;
-    		rst_2b2  = 1;
-    		rst_disp = 1; 
-    	
+	always @ (state) begin
         case (state)
-                S0: ;  // 11111
-                S1: rst_mem  = 0;                                      // 01111
-                S2: begin rst_mem = 0; rst_pe = 0; end                 // 00111
-                S3: begin rst_mem = 0; rst_pe = 0; rst_3b3 = 0; end    // 00011
-                S4: begin rst_mem = 0; rst_pe = 0; rst_3b3 = 0; rst_2b2 = 0; end // 00001
-                S5: begin rst_mem = 0; rst_pe = 0; rst_3b3 = 0; rst_2b2 = 0; rst_disp = 0; end // 00000           
+                S0: begin rst_mem <= 1; rst_pe <= 1; rst_3b3 <= 1; rst_2b2 <= 1; rst_disp <= 1; end // 11111
+                S1: begin rst_mem <= 0; rst_pe <= 1; rst_3b3 <= 1; rst_2b2 <= 1; rst_disp <= 1; end // 01111
+                S2: begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 1; rst_2b2 <= 1; rst_disp <= 1; end // 00111
+                S3: begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 0; rst_2b2 <= 1; rst_disp <= 1; end // 00011
+                S4: begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 0; rst_2b2 <= 0; rst_disp <= 1; end // 00001
+                S5: begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 0; rst_2b2 <= 0; rst_disp <= 0; end // 00000           
         endcase
     end
 endmodule
