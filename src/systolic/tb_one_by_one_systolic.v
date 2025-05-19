@@ -36,7 +36,7 @@ module tb_one_by_one_systolic;
 		);
 
 	initial forever begin
-		#10 clk = ~clk;
+		#5 clk = ~clk;
 	end
 	
 	initial begin

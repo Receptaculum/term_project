@@ -5,7 +5,10 @@ module controller (
     output reg rst_pe,
     output reg rst_3b3,
     output reg rst_2b2,
-    output reg rst_disp
+    output reg rst_disp,
+	
+	//임시 추가
+	output [2:0] state
 );
 
     // 상태 정의
@@ -17,11 +20,11 @@ module controller (
     reg [31:0] target_count;
 
     // 사용자 정의 시간 (100MHz 기준, 1초 = 100,000,000)
-    parameter TIME_S0 = 100_000_000,   //1초
-              TIME_S1 = 200_000_000,   
-              TIME_S2 = 300_000_000,  
-              TIME_S3 = 400_000_000,   
-              TIME_S4 = 500_000_000;   
+    parameter TIME_S0 = 100,
+              TIME_S1 = 100,   
+              TIME_S2 = 100,  
+              TIME_S3 = 100,   
+              TIME_S4 = 100;   
               // S5는 종료 상태로 고정됨
 
     // 상태 전이 및 카운터
