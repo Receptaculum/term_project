@@ -4,8 +4,7 @@ module display(
     input [7:0] c9_11, c9_12, c9_21, c9_22, 
                 c4_11, c4_12, c4_21, c4_22,
     output reg [2:0] digit,
-    output reg [7:0] seg_data,
-	output reg [3:0] state
+    output reg [7:0] seg_data
     );
     
     //clk
@@ -25,7 +24,7 @@ module display(
     parameter S07 = 4'b0111;
     parameter S08 = 4'b1000;
     
-
+    reg [3:0] state;
     reg [3:0] next_state;
     
     always @(posedge clk_1hz or posedge resetn) begin

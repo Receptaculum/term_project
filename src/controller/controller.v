@@ -5,10 +5,7 @@ module controller (
     output reg rst_pe,
     output reg rst_3b3,
     output reg rst_2b2,
-    output reg rst_disp,
-	
-	//임시 추가
-	output [2:0] state
+    output reg rst_disp
 );
 
     // 상태 정의
