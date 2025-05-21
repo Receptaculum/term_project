@@ -38,7 +38,6 @@ o10, o11
 	o10, o11;
 	
 	wire clk;
-	assign clk = clk_in;
 	
 	/* --I/O Declaration End-- */
 	
@@ -140,68 +139,56 @@ o10, o11
 	//		 out1         out2         out3
 	//		  |            |			|
 	//        V            V			V
-	// 	    mem00(o11_1) mem01        mem02
+	// 	    mem00(dat_1) mem01        mem02
 	//   	  |            |	   	    |
 	// 	   	 mw1		  mw2	       mw3
 	//  	  |            |		    |
-	//      mem10        mem11(o11_2) mem12
+	//      mem10        mem11(dat_2) mem12
 	//   	  |            |            |
 	// 	     mw4          mw5          mw6
 	//  	  |            |            |
-	//      mem20        mem21     	  mem22(o11_3)
+	//      mem20        mem21     	  mem22(dat_3)
 	//   	  |            |            |
 	// 	     mw7          mw8          mw9	
-	//   	  |            |            |
-	// 	    mem30(o00)   mem31        mem32
-	//   	  |            |	   	    |
-	// 	   	 mw10		  mw11	       mw12
-	//  	  |            |		    |
-	//      mem40        mem41(o01)   mem42
-	//   	  |            |            |
-	// 	     mw13         mw14         mw15
-	//  	  |            |            |
-	//      mem50        mem51     	  mem52(o10)
-	//   	  |            |            |
-	// 	     mw16         mw17         mw18
-	
+
 	// Wire Declaration
-	wire clk_mem;
 	wire [7:0] mw1, mw2, mw3;
 	wire [7:0] mw4, mw5, mw6;
 	wire [7:0] mw7, mw8, mw9;
-	wire [7:0] mw10, mw11, mw12;
-	wire [7:0] mw13, mw14, mw15;
-	wire [7:0] mw16, mw17, mw18;
 	
-	assign clk_mem = mode & clk;
 	
 	// Memory Instantiation
-	eight_bit_register mem00 (.in(out1), .clk(clk_mem), .rst(rst), .out(mw1));
-	eight_bit_register mem10 (.in(mw1), .clk(clk_mem), .rst(rst), .out(mw4));
-	eight_bit_register mem20 (.in(mw4), .clk(clk_mem), .rst(rst), .out(mw7));
-	eight_bit_register mem30 (.in(mw7), .clk(clk_mem), .rst(rst), .out(mw10));
-	eight_bit_register mem40 (.in(mw10), .clk(clk_mem), .rst(rst), .out(mw13));
-	eight_bit_register mem50 (.in(mw13), .clk(clk_mem), .rst(rst), .out(mw16));
+	eight_bit_register mem00 (.in(out1), .clk(clk), .rst(rst), .out(mw1));
+	eight_bit_register mem10 (.in(mw1), .clk(clk), .rst(rst), .out(mw4));
+	eight_bit_register mem20 (.in(mw4), .clk(clk), .rst(rst), .out(mw7));
 
-	eight_bit_register mem01 (.in(out2), .clk(clk_mem), .rst(rst), .out(mw2));
-	eight_bit_register mem11 (.in(mw2), .clk(clk_mem), .rst(rst), .out(mw5));
-	eight_bit_register mem21 (.in(mw5), .clk(clk_mem), .rst(rst), .out(mw8));
-	eight_bit_register mem31 (.in(mw8), .clk(clk_mem), .rst(rst), .out(mw11));
-	eight_bit_register mem41 (.in(mw11), .clk(clk_mem), .rst(rst), .out(mw14));
-	eight_bit_register mem51 (.in(mw14), .clk(clk_mem), .rst(rst), .out(mw17));
+	eight_bit_register mem01 (.in(out2), .clk(clk), .rst(rst), .out(mw2));
+	eight_bit_register mem11 (.in(mw2), .clk(clk), .rst(rst), .out(mw5));
+	eight_bit_register mem21 (.in(mw5), .clk(clk), .rst(rst), .out(mw8));
 	
-	eight_bit_register mem02 (.in(out3), .clk(clk_mem), .rst(rst), .out(mw3));
-	eight_bit_register mem12 (.in(mw3), .clk(clk_mem), .rst(rst), .out(mw6));
-	eight_bit_register mem22 (.in(mw6), .clk(clk_mem), .rst(rst), .out(mw9));
-	eight_bit_register mem32 (.in(mw9), .clk(clk_mem), .rst(rst), .out(mw12));
-	eight_bit_register mem42 (.in(mw12), .clk(clk_mem), .rst(rst), .out(mw15));
-	eight_bit_register mem52 (.in(mw15), .clk(clk_mem), .rst(rst), .out(mw18));
+	eight_bit_register mem02 (.in(out3), .clk(clk), .rst(rst), .out(mw3));
+	eight_bit_register mem12 (.in(mw3), .clk(clk), .rst(rst), .out(mw6));
+	eight_bit_register mem22 (.in(mw6), .clk(clk), .rst(rst), .out(mw9));
 	
 	// Wiring between reg and out
-	assign o00 = mw10;
-	assign o01 = mw14;
-	assign o10 = mw18;
-	assign o11 = mw1 + mw5 + mw9;
+	
+	wire clk_cycle_1;
+	wire clk_cycle_2;
+	wire [7:0] o11_1, o11_2, o11_3;
+	
+	assign clk_cycle_1 = cnt == 18;
+	assign clk_cycle_2 = cnt == 32;
+	
+	
+	eight_bit_register mem_o00 (.in(mw1), .clk(clk_cycle_1), .rst(rst), .out(o00));
+	eight_bit_register mem_o01 (.in(mw5), .clk(clk_cycle_1), .rst(rst), .out(o01));
+	eight_bit_register mem_o10 (.in(mw9), .clk(clk_cycle_1), .rst(rst), .out(o10));
+	
+	eight_bit_register mem_o11_1 (.in(mw1), .clk(clk_cycle_2), .rst(rst), .out(o11_1));
+	eight_bit_register mem_o11_2 (.in(mw5), .clk(clk_cycle_2), .rst(rst), .out(o11_2));
+	eight_bit_register mem_o11_3 (.in(mw9), .clk(clk_cycle_2), .rst(rst), .out(o11_3));
+
+	assign o11 = o11_1 + o11_2 + o11_3;
 
 	/* --Memory Declaration End-- */
 
@@ -289,12 +276,23 @@ o10, o11
 	wire [7:0] cnt;
 	wire [7:0] cnt_sum;	
 	wire [7:0] cnt_sw;
-	wire cnt_stop_pre;
+	wire cnt_stop_pre, cnt_stop_neg;
+	wire en_mem;
 
 	// Counter Stop Condition 
-	assign pe_rst = (cnt == 16);
-	assign mode = (12 < cnt)& (cnt < 16) ;
-	assign cnt_stop_pre = 0;
+	assign pe_rst = cnt[4] & !cnt[3] & !cnt[2] & cnt[1] & cnt[0];
+	assign cnt_stop_pre = (cnt >= 32);
+	assign cnt_stop_neg = !cnt_stop_pre;
+	assign mode = ((14 < cnt) & (cnt <= 17)) || ((28 < cnt) & (cnt <= 31));
+	
+	
+	// Ideal Checkpoint	
+	//assign mode = ((12 < cnt) & (cnt <= 15)) || ((28 < cnt) & (cnt <= 31));
+	//assign mode = (cnt[3] & cnt[2] & cnt[1] & cnt[0]) | (cnt[3] & cnt[2] & cnt[1] & !cnt[0]) | (cnt[3] & cnt[2] & !cnt[1] & cnt[0]);
+	assign clk = clk_in & cnt_stop_neg;
+
+
+
 	
 	// Instantiation for Counter 1
 	eight_bit_register reg_cnt (.in(cnt_sum), .clk(clk), .rst(rst), .out(cnt)); // Register
@@ -329,9 +327,12 @@ o10, o11
 						          .i(seq_a0_8_m0), .j(8'd0), .k(8'd0), .l(8'd0),
 							      .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
 							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(a0_m0));
-
-	eight_bit_4_1_mux mux_a0_m1 (.a(seq_a0_0_m1), .b(seq_a0_1_m1), .c(seq_a0_2_m1), .d(8'd0),
-								 .s0(cnt[0]), .s1(cnt[1]), .out(a0_m1));
+							
+	eight_bit_16_1_mux mux_a0_m1 (.a(8'd0), .b(8'd0), .c(8'd0), .d(8'd0), 
+	                              .e(seq_a0_0_m1), .f(seq_a0_1_m1), .g(seq_a0_2_m1), .h(8'd0), 
+						          .i(8'd0), .j(8'd0), .k(8'd0), .l(8'd0),
+							      .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
+							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(a0_m1));
 
 	eight_bit_16_1_mux mux_a1_m0 (.a(seq_a1_0_m0), .b(seq_a1_1_m0), .c(seq_a1_2_m0), .d(seq_a1_3_m0), 
 							      .e(seq_a1_4_m0), .f(seq_a1_5_m0), .g(seq_a1_6_m0), .h(seq_a1_7_m0),
@@ -339,18 +340,23 @@ o10, o11
 						    	  .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
 							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(a1_m0));
 								
-	eight_bit_4_1_mux mux_a1_m1 (.a(seq_a1_0_m1), .b(seq_a1_1_m1), .c(seq_a1_2_m1), .d(8'd0),
-								 .s0(cnt[0]), .s1(cnt[1]), .out(a1_m1));						
+	eight_bit_16_1_mux mux_a1_m1 (.a(8'd0), .b(8'd0), .c(8'd0), .d(8'd0), 
+	                              .e(seq_a1_0_m1), .f(seq_a1_1_m1), .g(seq_a1_2_m1), .h(8'd0), 
+						          .i(8'd0), .j(8'd0), .k(8'd0), .l(8'd0),
+							      .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
+							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(a1_m1));				
 							   
 	eight_bit_16_1_mux mux_a2_m0 (.a(seq_a2_0_m0), .b(seq_a2_1_m0), .c(seq_a2_2_m0), .d(seq_a2_3_m0), 
 							      .e(seq_a2_4_m0), .f(seq_a2_5_m0), .g(seq_a2_6_m0), .h(seq_a2_7_m0),
 						          .i(seq_a2_8_m0), .j(8'd0), .k(8'd0), .l(8'd0),
 							      .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
 							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(a2_m0));
-								  
-	eight_bit_4_1_mux mux_a2_m1 (.a(seq_a2_0_m1), .b(seq_a2_1_m1), .c(seq_a2_2_m1), .d(8'd0),
-								 .s0(cnt[0]), .s1(cnt[1]), .out(a2_m1));
-
+								
+	eight_bit_16_1_mux mux_a2_m1 (.a(8'd0), .b(8'd0), .c(8'd0), .d(8'd0), 
+	                              .e(seq_a2_0_m1), .f(seq_a2_1_m1), .g(seq_a2_2_m1), .h(8'd0), 
+						          .i(8'd0), .j(8'd0), .k(8'd0), .l(8'd0),
+							      .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
+							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(a2_m1));
 
 	eight_bit_16_1_mux mux_b0_m0 (.a(seq_b0_0_m0), .b(seq_b0_1_m0), .c(seq_b0_2_m0), .d(seq_b0_3_m0), 
 							      .e(seq_b0_4_m0), .f(seq_b0_5_m0), .g(seq_b0_6_m0), .h(seq_b0_7_m0),
@@ -358,9 +364,11 @@ o10, o11
 							      .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
 							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(b0_m0));
 
-	eight_bit_4_1_mux mux_b0_m1 (.a(seq_b0_0_m1), .b(seq_b0_1_m1), .c(seq_b0_2_m1), .d(8'd0),
-								 .s0(cnt[0]), .s1(cnt[1]), .out(b0_m1));
-
+	eight_bit_16_1_mux mux_b0_m1 (.a(8'd0), .b(8'd0), .c(8'd0), .d(8'd0), 
+	                              .e(seq_b0_0_m1), .f(seq_b0_1_m1), .g(seq_b0_2_m1), .h(8'd0), 
+						          .i(8'd0), .j(8'd0), .k(8'd0), .l(8'd0),
+							      .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
+							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(b0_m1));
 
 	eight_bit_16_1_mux mux_b1_m0 (.a(seq_b1_0_m0), .b(seq_b1_1_m0), .c(seq_b1_2_m0), .d(seq_b1_3_m0), 
 							      .e(seq_b1_4_m0), .f(seq_b1_5_m0), .g(seq_b1_6_m0), .h(seq_b1_7_m0),
@@ -368,8 +376,11 @@ o10, o11
 							      .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
 							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(b1_m0));
 
-	eight_bit_4_1_mux mux_b1_m1 (.a(seq_b1_0_m1), .b(seq_b1_1_m1), .c(seq_b1_2_m1), .d(8'd0),
-								 .s0(cnt[0]), .s1(cnt[1]), .out(b1_m1));
+	eight_bit_16_1_mux mux_b1_m1 (.a(8'd0), .b(8'd0), .c(8'd0), .d(8'd0), 
+	                              .e(seq_b1_0_m1), .f(seq_b1_1_m1), .g(seq_b1_2_m1), .h(8'd0), 
+						          .i(8'd0), .j(8'd0), .k(8'd0), .l(8'd0),
+							      .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
+							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(b1_m1));		
 							   
 	eight_bit_16_1_mux mux_b2_m0 (.a(seq_b2_0_m0), .b(seq_b2_1_m0), .c(seq_b2_2_m0), .d(seq_b2_3_m0), 
 							      .e(seq_b2_4_m0), .f(seq_b2_5_m0), .g(seq_b2_6_m0), .h(seq_b2_7_m0),
@@ -377,8 +388,12 @@ o10, o11
 							      .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
 							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(b2_m0));
 
-	eight_bit_4_1_mux mux_b2_m1 (.a(seq_b2_0_m1), .b(seq_b2_1_m1), .c(seq_b2_2_m1), .d(8'd0),
-								 .s0(cnt[0]), .s1(cnt[1]), .out(b2_m1));		
+	eight_bit_16_1_mux mux_b2_m1 (.a(8'd0), .b(8'd0), .c(8'd0), .d(8'd0), 
+	                              .e(seq_b2_0_m1), .f(seq_b2_1_m1), .g(seq_b2_2_m1), .h(8'd0), 
+						          .i(8'd0), .j(8'd0), .k(8'd0), .l(8'd0),
+							      .m(8'd0), .n(8'd0), .o(8'd0), .p(8'd0), 
+							      .s0(cnt[0]), .s1(cnt[1]), .s2(cnt[2]), .s3(cnt[3]), .out(b2_m1));
+	
 	/* --Sequence Flow Controller End-- */
 	
 endmodule
