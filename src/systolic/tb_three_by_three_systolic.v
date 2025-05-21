@@ -48,13 +48,13 @@ module tb_three_by_three_systolic;
 		
 		clk <= 0;
 		rst <= 1;
-		#200
+		#20
 		
 		rst <= 0;
 		#500
 		
 		rst <= 1;
-		#200
+		#20
 		rst <= 0;
 	end
 
