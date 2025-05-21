@@ -10,8 +10,8 @@ module display(
     //clk
     wire clk_1hz;
     wire clk_1000hz;
-    clock_divider #(49) div1 (clk, clk_1000hz);
-    clock_divider #(499) div2 (clk, clk_1hz);
+    clock_divider #(49999) div1 (clk, clk_1000hz);
+    clock_divider #(49999999) div2 (clk, clk_1hz);
     
     //fsm set
     parameter INI = 4'b0000;
@@ -27,13 +27,13 @@ module display(
     reg [3:0] state;
     reg [3:0] next_state;
     
-    always @(posedge clk_1hz or posedge resetn) begin
-        if (resetn) state <= INI;
+    always @(posedge clk_1hz or negedge resetn) begin
+        if (~resetn) state <= INI;
         else state <= next_state;
     end
     
-    always @(posedge clk_1hz) begin
-        if (resetn) next_state = INI;
+    always @(posedge clk_1000hz) begin
+        if (~resetn) next_state = INI;
         else
             case (state)
                 INI : next_state = S01;
@@ -147,8 +147,8 @@ module display(
         endcase
     end
         
-    always @(posedge clk_1000hz or posedge resetn) begin
-        if (resetn) i = 0;
+    always @(posedge clk_1000hz or negedge resetn) begin
+        if (~resetn) i = 0;
         else begin
             if (i < 3) begin
                 i <= i + 1;
