@@ -1,4 +1,4 @@
-//`timescale 1ns / 1ps
+`timescale 1ns / 1ps
 
 module tb_three_by_three_systolic;
 
@@ -19,7 +19,7 @@ module tb_three_by_three_systolic;
 	o00, o01,
 	o10, o11;
 
-	three_by_three_systolic_v2 systolic (
+	three_by_three_systolic systolic (
 		clk, rst,
 
 		i00, i01, i02, i03,
