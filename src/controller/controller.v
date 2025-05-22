@@ -19,9 +19,9 @@ module controller (
     // 사용자 정의 시간 (100MHz 기준, 1초 = 100,000,000)
     parameter TIME_S0 = 10000,
               TIME_S1 = 10000,   
-              TIME_S2 = 10000,  
-              TIME_S3 = 10000,   
-              TIME_S4 = 10000;   
+              TIME_S2 = 200000,  
+              TIME_S3 = 200000,   
+              TIME_S4 = 200000;   
               // S5는 종료 상태로 고정됨
 
     // 상태 전이 및 카운터
