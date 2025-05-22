@@ -13,7 +13,11 @@ module processing_element (clk, rst, mode, a_in, b_in, c_in, a_out, b_out, c_out
 	
 	// Selection Wire
 	wire [7:0] sel_sig; 
- 
+
+	// ACC Wire Declaration
+    wire [7:0] acc_pre;
+	wire [7:0] acc_post;
+
 	// Module Instantiation
 	eight_bit_2_1_mux selector (.a(acc_post), .b(c_in), .s(mode), .out(sel_sig));
 	eight_bit_register cout_reg (.in(sel_sig), .clk(clk), .rst(rst), .out(c_out));
@@ -90,10 +94,6 @@ module processing_element (clk, rst, mode, a_in, b_in, c_in, a_out, b_out, c_out
     eight_bit_full_adder fa4 (.a(operand_val_5_post), .b(sum_3), .cin(1'b0), .sum(sum_4), .cout());
     eight_bit_full_adder fa5 (.a(operand_val_6_post), .b(sum_4), .cin(1'b0), .sum(sum_5), .cout());
     eight_bit_full_adder fa6 (.a(operand_val_7_post), .b(sum_5), .cin(1'b0), .sum(sum_6), .cout());
-
-	// ACC Wire Declaration
-    wire [7:0] acc_pre;
-	wire [7:0] acc_post;
 
 	// Accumulation process
 	eight_bit_full_adder fa_acc (.a(acc_post), .b(sum_6), .cin(1'b0), .sum(acc_pre), .cout());

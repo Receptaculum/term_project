@@ -195,7 +195,7 @@ o10, o11
 	assign cnt_stop_pre = cnt >= 15;
 		
 	// Instantiation for Counter 1
-	eight_bit_register reg_cnt (.in(cnt_sum), .clk(clk), .rst(rst), .out(cnt)); // Register
+	four_bit_register reg_cnt (.in(cnt_sum), .clk(clk), .rst(rst), .out(cnt)); // Register
 	four_bit_full_adder cnt_add (.a(cnt), .b(cnt_sw), .cin(1'b0), .sum(cnt_sum), .cout()); // Adder
 	four_bit_2_1_mux mux_sw (.a(4'd1), .b(4'd0), .s(cnt_stop_pre), .out(cnt_sw)); // Mux (Switch)
 
@@ -233,7 +233,7 @@ o10, o11
 	assign clk = cnt_stop_clk & clk_in; 
 
 	// Instantiation for Counter 2
-	eight_bit_register reg_cnt_clk (.in(cnt_sum_clk), .clk(clk), .rst(rst), .out(cnt_clk)); // Register
+	four_bit_register reg_cnt_clk (.in(cnt_sum_clk), .clk(clk), .rst(rst), .out(cnt_clk)); // Register
 	four_bit_full_adder cnt_add_clk (.a(cnt_clk), .b(cnt_sw_clk), .cin(1'b0), .sum(cnt_sum_clk), .cout()); // Adder
 	four_bit_2_1_mux mux_sw_clk (.a(4'd0), .b(4'd1), .s(cnt_stop_post), .out(cnt_sw_clk)); // Mux (Switch)
 	

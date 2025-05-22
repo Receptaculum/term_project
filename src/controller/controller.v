@@ -17,11 +17,11 @@ module controller (
     reg [31:0] target_count;
 
     // 사용자 정의 시간 (100MHz 기준, 1초 = 100,000,000)
-    parameter TIME_S0 = 1000,
-              TIME_S1 = 1000,   
-              TIME_S2 = 1000,  
-              TIME_S3 = 1000,   
-              TIME_S4 = 1000;   
+    parameter TIME_S0 = 10000,
+              TIME_S1 = 10000,   
+              TIME_S2 = 10000,  
+              TIME_S3 = 10000,   
+              TIME_S4 = 10000;   
               // S5는 종료 상태로 고정됨
 
     // 상태 전이 및 카운터
@@ -76,12 +76,13 @@ module controller (
     // 출력 신호 제어 (Moore 방식)
 	always @ (state) begin
         case (state)
-                S0: begin rst_mem <= 1; rst_pe <= 1; rst_3b3 <= 1; rst_2b2 <= 1; rst_disp <= 0; end // 11111
-                S1: begin rst_mem <= 0; rst_pe <= 1; rst_3b3 <= 1; rst_2b2 <= 1; rst_disp <= 0; end // 01111
-                S2: begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 1; rst_2b2 <= 1; rst_disp <= 0; end // 00111
-                S3: begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 0; rst_2b2 <= 1; rst_disp <= 0; end // 00011
-                S4: begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 0; rst_2b2 <= 0; rst_disp <= 0; end // 00001
-                S5: begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 0; rst_2b2 <= 0; rst_disp <= 1; end // 00000           
+                S0 : begin rst_mem <= 1; rst_pe <= 1; rst_3b3 <= 1; rst_2b2 <= 1; rst_disp <= 0; end // 11110
+                S1 : begin rst_mem <= 0; rst_pe <= 1; rst_3b3 <= 1; rst_2b2 <= 1; rst_disp <= 0; end // 01110
+                S2 : begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 1; rst_2b2 <= 1; rst_disp <= 0; end // 00110
+                S3 : begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 0; rst_2b2 <= 1; rst_disp <= 0; end // 00010
+                S4 : begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 0; rst_2b2 <= 0; rst_disp <= 0; end // 00000
+                S5 : begin rst_mem <= 0; rst_pe <= 0; rst_3b3 <= 0; rst_2b2 <= 0; rst_disp <= 1; end // 00001 
+           default : begin rst_mem <= 1; rst_pe <= 1; rst_3b3 <= 1; rst_2b2 <= 1; rst_disp <= 0; end // 11110    
         endcase
     end
 endmodule

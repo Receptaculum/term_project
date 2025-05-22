@@ -41,7 +41,28 @@ o10, o11
 
 //------------------------------------------------------------------------------------------
 			
+	/* --Counter 1 Declaration Start-- */
+
+	// Wire Declaration for Counter 
+	wire [7:0] cnt;
+	wire [7:0] cnt_sum;	
+	wire [7:0] cnt_sw;
+	wire cnt_stop;
+
+	// Counter Stop Condition (CNT >= 63) 
+	assign cnt_stop = cnt >= 63;
+	assign cnt_stop_clk = cnt < 64; // 1 Clock Margin
+	assign clk = cnt_stop_clk & clk_in;
 	
+	// Instantiation for Counter
+	eight_bit_register reg_cnt (.in(cnt_sum), .clk(clk), .rst(rst), .out(cnt)); // Register
+	eight_bit_full_adder cnt_add (.a(cnt), .b(cnt_sw), .cin(1'b0), .sum(cnt_sum), .cout()); // Adder
+	eight_bit_2_1_mux mux_sw (.a(8'd1), .b(8'd0), .s(cnt_stop), .out(cnt_sw)); // Mux (Switch)
+
+	/* --Counter 1 Declaration End-- */		
+
+//------------------------------------------------------------------------------------------
+		
 	/* --PE Declaration Start-- */
 	
 	// Wire Declaration for PE
@@ -172,28 +193,6 @@ o10, o11
 	= {f22, f12, f02, f21, f11, f01, f20, f10, f00};
 
 	/* --Sequence Declaration End-- */
-
-	//------------------------------------------------------------------------------------------
-
-	/* --Counter 1 Declaration Start-- */
-
-	// Wire Declaration for Counter 
-	wire [7:0] cnt;
-	wire [7:0] cnt_sum;	
-	wire [7:0] cnt_sw;
-	wire cnt_stop;
-
-	// Counter Stop Condition (CNT >= 63) 
-	assign cnt_stop = cnt >= 63;
-	assign cnt_stop_clk = cnt < 64; // 1 Clock Margin
-	assign clk = cnt_stop_clk & clk_in;
-	
-	// Instantiation for Counter
-	eight_bit_register reg_cnt (.in(cnt_sum), .clk(clk), .rst(rst), .out(cnt)); // Register
-	eight_bit_full_adder cnt_add (.a(cnt), .b(cnt_sw), .cin(1'b0), .sum(cnt_sum), .cout()); // Adder
-	eight_bit_2_1_mux mux_sw (.a(8'd1), .b(8'd0), .s(cnt_stop), .out(cnt_sw)); // Mux (Switch)
-
-	/* --Counter 1 Declaration End-- */		
 
 	//------------------------------------------------------------------------------------------	
 	
