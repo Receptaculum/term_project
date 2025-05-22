@@ -1,4 +1,4 @@
-module three_by_three_systolic (
+module three_by_three_systolic_v1 (
 clk_in, rst,
 
 i00, i01, i02, i03,

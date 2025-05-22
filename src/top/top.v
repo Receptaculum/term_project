@@ -61,7 +61,7 @@ module top (clk, rst, digit, seg_data);
     );
 	
     // 3 By 3 Systolic
-    three_by_three_systolic three_by_three (.clk_in(clk), .rst(rst_3b3),
+    three_by_three_systolic_v2 three_by_three_v2 (.clk_in(clk), .rst(rst_3b3),
     .i00(i00), .i01(i01), .i02(i02), .i03(i03),
     .i10(i10), .i11(i11), .i12(i12), .i13(i13),
     .i20(i20), .i21(i21), .i22(i22), .i23(i23),

@@ -57,8 +57,6 @@ o10, o11
 	assign c1 = 8'b0;
 	assign c2 = 8'b0;	
 	
-
-	
 	// <PE>
 	//
 	//		 b_in, c_in
@@ -170,18 +168,21 @@ o10, o11
 	eight_bit_register mem12 (.in(mw3), .clk(clk), .rst(rst), .out(mw6));
 	eight_bit_register mem22 (.in(mw6), .clk(clk), .rst(rst), .out(mw9));
 	
-	// Wiring between reg and out
 	
+	// Wire Declaration for Sub-Memory
 	wire clk_cycle_1_pre, clk_cycle_1_post;
 	wire clk_cycle_2_pre, clk_cycle_2_post;
 	wire [7:0] o11_1, o11_2, o11_3;
 
+	// Allocation Timing Declaration
 	assign clk_cycle_1_pre = cnt == 19;
 	assign clk_cycle_2_pre = cnt == 31;
 	
+	// Hazard Remover
 	one_bit_register clk_1_haz (.in(clk_cycle_1_pre), .clk(clk), .rst(rst), .out(clk_cycle_1_post));
 	one_bit_register clk_2_haz (.in(clk_cycle_2_pre), .clk(clk), .rst(rst), .out(clk_cycle_2_post));	
 	
+	// Sub-Memory Instantiation
 	eight_bit_register mem_o00 (.in(mw1), .clk(clk_cycle_1_post), .rst(rst), .out(o00));
 	eight_bit_register mem_o01 (.in(mw5), .clk(clk_cycle_1_post), .rst(rst), .out(o01));
 	eight_bit_register mem_o10 (.in(mw9), .clk(clk_cycle_1_post), .rst(rst), .out(o10));
@@ -190,6 +191,7 @@ o10, o11
 	eight_bit_register mem_o11_2 (.in(mw5), .clk(clk_cycle_2_post), .rst(rst), .out(o11_2));
 	eight_bit_register mem_o11_3 (.in(mw9), .clk(clk_cycle_2_post), .rst(rst), .out(o11_3));
 
+	// Value Addition for o11
 	assign o11 = o11_1 + o11_2 + o11_3;
 
 	/* --Memory Declaration End-- */
@@ -272,32 +274,27 @@ o10, o11
 //------------------------------------------------------------------------------------------
 
 	/* --Counter 1 Declaration Start-- */
-	// Counter 1 is utilized for MUX manipulation
-
+	
 	// Wire Declaration	
 	wire [7:0] cnt;
 	wire [7:0] cnt_sum;	
 	wire [7:0] cnt_sw;
 	wire cnt_stop_pre, cnt_stop_post, cnt_stop_neg;
 	
-	// Counter Stop Condition 
-	//19 = 10011 | 20 = 10100
+	// Module Manipulation Timing 
+	// pe_rst_pre = 20 = 10100
 	assign pe_rst_pre = cnt[4] & !cnt[3] & cnt[2] & !cnt[1] & !cnt[0]; 
 	assign cnt_stop_pre = (cnt >= 31);
 	assign cnt_stop_neg = !cnt_stop_post;
 	assign mode_pre = ((15 < cnt) & (cnt <= 20) || (27 < cnt) & (cnt <= 30));
 	
+	// Hazard Remover
 	one_bit_register rst_haz (.in(pe_rst_pre), .clk(clk), .rst(rst), .out(pe_rst_post));
     one_bit_register cnt_haz (.in(cnt_stop_pre), .clk(clk), .rst(rst), .out(cnt_stop_post));		
 	one_bit_register mode_haz (.in(mode_pre), .clk(clk), .rst(rst), .out(mode_post));		
 	
-	// Ideal Checkpoint	
-	//assign mode = ((12 < cnt) & (cnt <= 15)) || ((28 < cnt) & (cnt <= 31));
-	//assign mode = (cnt[3] & cnt[2] & cnt[1] & cnt[0]) | (cnt[3] & cnt[2] & cnt[1] & !cnt[0]) | (cnt[3] & cnt[2] & !cnt[1] & cnt[0]);
+	// Clock Enable
 	assign clk = clk_in & cnt_stop_neg;
-
-
-
 	
 	// Instantiation for Counter 1
 	eight_bit_register reg_cnt (.in(cnt_sum), .clk(clk), .rst(rst), .out(cnt)); // Register
@@ -310,6 +307,7 @@ o10, o11
 
 	/* --Sequence Flow Controller Start-- */
 	
+	// Wire Declaration
 	wire [7:0] a0_m0, a0_m1;
 	wire [7:0] a1_m0, a1_m1;
 	wire [7:0] a2_m0, a2_m1;
@@ -320,6 +318,7 @@ o10, o11
 	
 	wire [7:0] a0_pre, a1_pre, a2_pre, b0_pre, b1_pre, b2_pre;
 
+	// Hazard Remover
 	eight_bit_register a0_haz (.in(a0_pre), .clk(clk), .rst(rst), .out(a0));
 	eight_bit_register a1_haz (.in(a1_pre), .clk(clk), .rst(rst), .out(a1));
 	eight_bit_register a2_haz (.in(a2_pre), .clk(clk), .rst(rst), .out(a2));
@@ -327,6 +326,7 @@ o10, o11
 	eight_bit_register b1_haz (.in(b1_pre), .clk(clk), .rst(rst), .out(b1));
 	eight_bit_register b2_haz (.in(b2_pre), .clk(clk), .rst(rst), .out(b2));
 
+	// 2:1 Mux for Sequence Interchange
 	eight_bit_2_1_mux mux_a0 (.a(a0_m0), .b(a0_m1), .s(cnt[4]), .out(a0_pre));
 	eight_bit_2_1_mux mux_a1 (.a(a1_m0), .b(a1_m1), .s(cnt[4]), .out(a1_pre));
 	eight_bit_2_1_mux mux_a2 (.a(a2_m0), .b(a2_m1), .s(cnt[4]), .out(a2_pre));
@@ -335,7 +335,7 @@ o10, o11
 	eight_bit_2_1_mux mux_b1 (.a(b1_m0), .b(b1_m1), .s(cnt[4]), .out(b1_pre));
 	eight_bit_2_1_mux mux_b2 (.a(b2_m0), .b(b2_m1), .s(cnt[4]), .out(b2_pre));	
 
-	// Mux Instantiation for Sequence Selction
+	// 16:1 Mux for Sequence Selction
 	eight_bit_16_1_mux mux_a0_m0 (.a(seq_a0_0_m0), .b(seq_a0_1_m0), .c(seq_a0_2_m0), .d(seq_a0_3_m0), 
 							      .e(seq_a0_4_m0), .f(seq_a0_5_m0), .g(seq_a0_6_m0), .h(seq_a0_7_m0),
 						          .i(seq_a0_8_m0), .j(8'd0), .k(8'd0), .l(8'd0),

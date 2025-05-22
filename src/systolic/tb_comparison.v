@@ -1,4 +1,4 @@
-//`timescale 1ns / 1ps
+`timescale 1ns / 1ps
 
 module tb_comparision;
 
@@ -59,7 +59,7 @@ module tb_comparision;
 		o10_2, o11_2
 		);
 		
-	three_by_three_systolic systolic_3b3 (
+	three_by_three_systolic_v2 systolic_3b3_v2 (
 		clk, rst,
 
 		i00, i01, i02, i03,
