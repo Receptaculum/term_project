@@ -19,7 +19,7 @@ module tb_three_by_three_systolic;
 	o00, o01,
 	o10, o11;
 
-	three_by_three_systolic systolic (
+	three_by_three_systolic_v2 systolic_v2 (
 		clk, rst,
 
 		i00, i01, i02, i03,
@@ -48,13 +48,13 @@ module tb_three_by_three_systolic;
 		
 		clk <= 0;
 		rst <= 1;
-		#20
+		#200
 		
 		rst <= 0;
 		#500
 		
 		rst <= 1;
-		#20
+		#200
 		rst <= 0;
 	end
 
