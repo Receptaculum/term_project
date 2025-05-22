@@ -284,9 +284,9 @@ o10, o11
 	// Module Manipulation Timing 
 	// pe_rst_pre = 20 = 10100
 	assign pe_rst_pre = cnt[4] & !cnt[3] & cnt[2] & !cnt[1] & !cnt[0]; 
-	assign cnt_stop_pre = (cnt >= 31);
+	assign cnt_stop_pre = (cnt >= 32);
 	assign cnt_stop_neg = !cnt_stop_post;
-	assign mode_pre = ((15 < cnt) & (cnt <= 20) || (27 < cnt) & (cnt <= 30));
+	assign mode_pre = ((15 < cnt) & (cnt <= 20) || (27 < cnt) & (cnt <= 31));
 	
 	// Hazard Remover
 	one_bit_register rst_haz (.in(pe_rst_pre), .clk(clk), .rst(rst), .out(pe_rst_post));

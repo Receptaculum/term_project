@@ -17,11 +17,11 @@ module controller (
     reg [31:0] target_count;
 
     // 사용자 정의 시간 (100MHz 기준, 1초 = 100,000,000)
-    parameter TIME_S0 = 1000000,
-              TIME_S1 = 1000000,   
-              TIME_S2 = 1000000,  
-              TIME_S3 = 1000000,   
-              TIME_S4 = 1000000;   
+    parameter TIME_S0 = 1000,
+              TIME_S1 = 1000,   
+              TIME_S2 = 1000,  
+              TIME_S3 = 1000,   
+              TIME_S4 = 1000;   
               // S5는 종료 상태로 고정됨
 
     // 상태 전이 및 카운터
