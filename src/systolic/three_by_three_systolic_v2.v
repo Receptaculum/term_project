@@ -132,6 +132,27 @@ o10, o11
 
 	//------------------------------------------------------------------------------------------
 
+	/* --Counter 1 Declaration Start-- */
+	
+	// Wire Declaration	
+	wire [7:0] cnt;
+	wire [7:0] cnt_sum;	
+	wire [7:0] cnt_sw;
+	wire cnt_stop_pre, cnt_stop_neg;
+	
+	assign pe_rst = cnt[4] & !cnt[3] & !cnt[2] & cnt[1] & cnt[0];
+	assign cnt_stop_pre = (cnt >= 32);
+	assign mode = ((14 < cnt) & (cnt <= 17)) || ((28 < cnt) & (cnt <= 31));
+	
+	// Instantiation for Counter 1
+	eight_bit_register reg_cnt (.in(cnt_sum), .clk(clk_in), .rst(rst), .out(cnt)); // Register
+	eight_bit_full_adder cnt_add (.a(cnt), .b(cnt_sw), .cin(1'b0), .sum(cnt_sum), .cout()); // Adder
+	eight_bit_2_1_mux mux_sw (.a(8'd1), .b(8'd0), .s(cnt_stop_pre), .out(cnt_sw)); // Mux (Switch)
+
+	/* --Counter 1 Declaration End-- */	
+
+	//------------------------------------------------------------------------------------------
+
 	/* --Memory Declaration Start-- */
 	
 	// <Memory>
@@ -208,27 +229,6 @@ o10, o11
 
 	/* --Memory Declaration End-- */
 
-	//------------------------------------------------------------------------------------------
-
-	/* --Counter 1 Declaration Start-- */
-	
-	// Wire Declaration	
-	wire [7:0] cnt;
-	wire [7:0] cnt_sum;	
-	wire [7:0] cnt_sw;
-	wire cnt_stop_pre, cnt_stop_neg;
-	
-	assign pe_rst = cnt[4] & !cnt[3] & !cnt[2] & cnt[1] & cnt[0];
-	assign cnt_stop_pre = (cnt >= 32);
-	assign mode = ((14 < cnt) & (cnt <= 17)) || ((28 < cnt) & (cnt <= 31));
-	
-	// Instantiation for Counter 1
-	eight_bit_register reg_cnt (.in(cnt_sum), .clk(clk_in), .rst(rst), .out(cnt)); // Register
-	eight_bit_full_adder cnt_add (.a(cnt), .b(cnt_sw), .cin(1'b0), .sum(cnt_sum), .cout()); // Adder
-	eight_bit_2_1_mux mux_sw (.a(8'd1), .b(8'd0), .s(cnt_stop_pre), .out(cnt_sw)); // Mux (Switch)
-
-	/* --Counter 1 Declaration End-- */	
-	
 	//------------------------------------------------------------------------------------------
 
 	/* --Sequence Declaration Start-- */
