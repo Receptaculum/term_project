@@ -1,8 +1,9 @@
-module top (clk, rst, digit, seg_data);
+module top (clk, rst, digit, seg_data, prev_opt);
 	input clk, rst;
 	output [2:0] digit;
 	output [7:0] seg_data;
-	
+    output [7:0] prev_opt;
+
 	(* keep = "true" *) wire rst_mem, rst_pe, rst_3b3, rst_2b2, rst_disp;
 	
     (* keep = "true" *) wire [7:0]
@@ -28,6 +29,10 @@ module top (clk, rst, digit, seg_data);
 	o00_2b2, o01_2b2,
 	o10_2b2, o11_2b2;
 
+    // This code is included for preventing optimization(auto remove) of PE module which is not used
+    wire [7:0] prev_opt;
+    assign prev_opt = o00_pe + o01_pe + o10_pe + o11_pe;
+
 	// Controller
 	(* dont_touch = "true" *) controller control (.clk(clk), .rst(rst),
                         .rst_mem(rst_mem), .rst_pe(rst_pe),
@@ -44,7 +49,7 @@ module top (clk, rst, digit, seg_data);
     .filter_data0(f00), .filter_data1(f01), .filter_data2(f02),
     .filter_data3(f10), .filter_data4(f11), .filter_data5(f12),
     .filter_data6(f20), .filter_data7(f21), .filter_data8(f22));
-				
+
     // PE
     (* dont_touch = "true" *) one_by_one_systolic pe (.clk_in(clk), .rst(rst_pe),
     .i00(i00), .i01(i01), .i02(i02), .i03(i03),
