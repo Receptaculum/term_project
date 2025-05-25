@@ -52,22 +52,22 @@ module display(
     wire [11:0] c9_11_d, c9_12_d, c9_21_d, c9_22_d;
     wire [11:0] c4_11_d, c4_12_d, c4_21_d, c4_22_d;
     
-    Bi_to_BCD converter1 (c9_11, c9_11_d[11:8], c9_11_d[7:4], c9_11_d[3:0]);
-    Bi_to_BCD converter2 (c9_12, c9_12_d[11:8], c9_12_d[7:4], c9_12_d[3:0]);
-    Bi_to_BCD converter3 (c9_21, c9_21_d[11:8], c9_21_d[7:4], c9_21_d[3:0]);
-    Bi_to_BCD converter4 (c9_22, c9_22_d[11:8], c9_22_d[7:4], c9_22_d[3:0]);
-    Bi_to_BCD converter5 (c4_11, c4_11_d[11:8], c4_11_d[7:4], c4_11_d[3:0]);
-    Bi_to_BCD converter6 (c4_12, c4_12_d[11:8], c4_12_d[7:4], c4_12_d[3:0]);
-    Bi_to_BCD converter7 (c4_21, c4_21_d[11:8], c4_21_d[7:4], c4_21_d[3:0]);
-    Bi_to_BCD converter8 (c4_22, c4_22_d[11:8], c4_22_d[7:4], c4_22_d[3:0]);
+    Bi_to_BCD_gate_level converter1 (c9_11, c9_11_d[11:8], c9_11_d[7:4], c9_11_d[3:0]);
+    Bi_to_BCD_gate_level converter2 (c9_12, c9_12_d[11:8], c9_12_d[7:4], c9_12_d[3:0]);
+    Bi_to_BCD_gate_level converter3 (c9_21, c9_21_d[11:8], c9_21_d[7:4], c9_21_d[3:0]);
+    Bi_to_BCD_gate_level converter4 (c9_22, c9_22_d[11:8], c9_22_d[7:4], c9_22_d[3:0]);
+    Bi_to_BCD_gate_level converter5 (c4_11, c4_11_d[11:8], c4_11_d[7:4], c4_11_d[3:0]);
+    Bi_to_BCD_gate_level converter6 (c4_12, c4_12_d[11:8], c4_12_d[7:4], c4_12_d[3:0]);
+    Bi_to_BCD_gate_level converter7 (c4_21, c4_21_d[11:8], c4_21_d[7:4], c4_21_d[3:0]);
+    Bi_to_BCD_gate_level converter8 (c4_22, c4_22_d[11:8], c4_22_d[7:4], c4_22_d[3:0]);
     
     //decoder
     reg [3:0] decoder_f_in, decoder_s_in, decoder_t_in;
     wire [23:0] seg_data_group;
     
-    decoder decoder_f (decoder_f_in, seg_data_group[23:16]);
-    decoder decoder_s (decoder_s_in, seg_data_group[15:8]);
-    decoder decoder_t (decoder_t_in, seg_data_group[7:0]);
+    decoder_gate_level decoder_f (decoder_f_in, seg_data_group[23:16]);
+    decoder_gate_level decoder_s (decoder_s_in, seg_data_group[15:8]);
+    decoder_gate_level decoder_t (decoder_t_in, seg_data_group[7:0]);
     
     //seg_data rotation
     reg [1:0] i;
