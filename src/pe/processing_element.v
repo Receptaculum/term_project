@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module processing_element (clk, rst, mode, a_in, b_in, c_in, a_out, b_out, c_out);
 
 	// I/O Declaration

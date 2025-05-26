@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 // Gatelevel Model
 
 module xor_gate (a, b, out);

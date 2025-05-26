@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 // Structural Model
 
 module eight_bit_8_1_mux (a, b, c, d, e, f, g, h, s0, s1, s2, out);

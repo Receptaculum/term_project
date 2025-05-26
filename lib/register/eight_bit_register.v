@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 // Structural Model
 
 module eight_bit_register (in, clk, rst, out);

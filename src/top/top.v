@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module top (clk, rst, digit, seg_data, prev_opt);
 	input clk, rst;
 	output [2:0] digit;

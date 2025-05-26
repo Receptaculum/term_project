@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 // Behavioral Model
 
 module one_bit_register (in, clk, rst, out);

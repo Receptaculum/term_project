@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 // Gatelevel Model
 
 module one_bit_full_adder (a, b, cin, sum, cout);

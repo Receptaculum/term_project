@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module and_gate (a, b, out); 
 	
 	input a, b;

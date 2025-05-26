@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 // Gatelevel Model
 
 module one_bit_2_1_mux (a, b, s, out);

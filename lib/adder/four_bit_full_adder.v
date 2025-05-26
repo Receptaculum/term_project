@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 // Structural Model
 
 module four_bit_full_adder (a, b, cin, sum, cout);

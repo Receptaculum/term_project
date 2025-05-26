@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module three_by_three_systolic_v2 (
 clk_in, rst,
 
