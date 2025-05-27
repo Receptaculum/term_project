@@ -8,21 +8,21 @@ module controller (
     output reg rst_3b3,
     output reg rst_2b2,
     output reg rst_disp
-	output reg [2:0] state;
 );
 
     // 상태 정의
     parameter S0 = 3'b000, S1 = 3'b001, S2 = 3'b010,
               S3 = 3'b011, S4 = 3'b100, S5 = 3'b101;
 
+    reg [2:0] state;
     reg [31:0] counter;
 
     // 사용자 정의 시간 (100MHz 기준, 1초 = 100,000,000)
-    parameter TIME_S0 = 2000,
-              TIME_S1 = 2000,   
-              TIME_S2 = 40000,  
-              TIME_S3 = 20000,   
-              TIME_S4 = 20000;
+    parameter TIME_S0 = 20,
+              TIME_S1 = 20,   
+              TIME_S2 = 400,  
+              TIME_S3 = 200,   
+              TIME_S4 = 200;
 
     // 상태 전이 및 카운터
     always @(posedge clk or negedge rst) begin

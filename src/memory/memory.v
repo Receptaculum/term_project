@@ -30,15 +30,15 @@ module memory(
 );
 
     // 4x4 입력 고정값
-    wire [7:0] in0 = 8'd112,  in1 = 8'd224,  in2 = 8'd174,  in3 = 8'd135;
-    wire [7:0] in4 = 8'd41,  in5 = 8'd225,  in6 = 8'd115,  in7 = 8'd246;
-    wire [7:0] in8 = 8'd49,  in9 = 8'd73, in10 = 8'd215, in11 = 8'd106;
-    wire [7:0] in12 = 8'd59, in13 = 8'd227, in14 = 8'd21, in15 = 8'd64;
+    wire [7:0] in0 = 8'd15,  in1 = 8'd225,  in2 = 8'd61,  in3 = 8'd68;
+    wire [7:0] in4 = 8'd169,  in5 = 8'd40,  in6 = 8'd71,  in7 = 8'd140;
+    wire [7:0] in8 = 8'd120,  in9 = 8'd9, in10 = 8'd253, in11 = 8'd246;
+    wire [7:0] in12 = 8'd12, in13 = 8'd151, in14 = 8'd232, in15 = 8'd234;
 
     // 3x3 필터 고정값
-    wire [7:0] f0 = 8'd70, f1 = 8'd87, f2 = 8'd210;
-    wire [7:0] f3 = 8'd89, f4 = 8'd191, f5 = 8'd144;
-    wire [7:0] f6 = 8'd184, f7 = 8'd113, f8 = 8'd177;
+    wire [7:0] f0 = 8'd175, f1 = 8'd196, f2 = 8'd212;
+    wire [7:0] f3 = 8'd117, f4 = 8'd241, f5 = 8'd69;
+    wire [7:0] f6 = 8'd9, f7 = 8'd255, f8 = 8'd188;
 	
 
     eight_bit_register r0 (.clk(clk), .rst(rst), .in(in0),  .out(input_data0));
