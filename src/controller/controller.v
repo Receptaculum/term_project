@@ -18,11 +18,11 @@ module controller (
     reg [31:0] counter;
 
     // 사용자 정의 시간 (100MHz 기준, 1초 = 100,000,000)
-    parameter TIME_S0 = 20,
-              TIME_S1 = 20,   
-              TIME_S2 = 400,  
-              TIME_S3 = 200,   
-              TIME_S4 = 200;
+    parameter TIME_S0 = 200,
+              TIME_S1 = 200,   
+              TIME_S2 = 4000,  
+              TIME_S3 = 2000,   
+              TIME_S4 = 2000;
 
     // 상태 전이 및 카운터
     always @(posedge clk or negedge rst) begin
