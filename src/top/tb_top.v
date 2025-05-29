@@ -6,7 +6,7 @@ module tb_top;
 	wire [7:0] seg_data;
 	wire [2:0] digit;
 	
-	top top_module (clk, rst, digit, seg_data);
+	top top_module (.clk(clk), .rst(rst), .digit(digit), .seg_data(seg_data));
 
 	initial begin 
 		clk <= 0;
